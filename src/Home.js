@@ -6,18 +6,23 @@ import './Home.css'
 const Home = () => {
     const [exchangeRate, setExchangeRate] = useState(null)
     
-    const onCurrencyChange = async (e) => {
+    const onCurrencyChange = (e) => {
         const currency = e.target.value;
         //console.log("currency", currency)
         const url='https://v6.exchangerate-api.com/v6/31b3d620a96669075780fd70/latest/INR'
         if (currency === "USD") {
-            await fetch(url)
-                .then((response) => response.json())
+             fetch(url)
+                .then((response) => {
+                    if(response.ok) 
+                        return response.json()
+                    
+                    throw response;
+                })
                 .then(({ conversion_rates: { USD } }) => {
                     setExchangeRate(USD)
                     console.log(USD)
                 })
-                .catch(err => console.log(err))
+                .catch(err => console.log(err,'err'))
         } else {
             setExchangeRate(null)
         }
